@@ -51,6 +51,9 @@ function! hallebarde#run() abort
             echomsg "The hallebarde file is empty"
             echohl None
             
+        elseif len(l:list) == 1
+            call s:sink(l:list[0])
+        
         else
             call fzf#run({
                 \  "source":  l:list,
