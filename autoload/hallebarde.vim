@@ -28,7 +28,11 @@ endfunction
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 function! s:sink(file) abort
-    execute "edit " . a:file
+    if a:file[0] == "ctrl-e"
+        call hallebarde#open()
+    else
+        execute "edit " . a:file[1]
+    endif
 endfunction
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -57,8 +61,8 @@ function! hallebarde#run() abort
         else
             call fzf#run({
                 \  "source":  l:list,
-                \  "sink":    function('s:sink'),
-                \  "options": "-x +s",
+                \  "sink*":   function('s:sink'),
+                \  "options": "-x +s --expect=ctrl-e",
                 \  "window":  g:hallebarde_window_options
                 \ } )
     
