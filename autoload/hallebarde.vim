@@ -12,15 +12,7 @@ endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 function! s:get_file_list() abort
-    if filereadable(g:hallebarde_file)
-        return readfile(g:hallebarde_file)
-    else
-        echohl ErrorMsg
-        echomsg "The " . g:hallebarde_file . " file does not exists"
-        echohl None
-        
-        return []
-    endif
+    return readfile(g:hallebarde_file)
 endfunction
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -28,19 +20,28 @@ endfunction
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 function! hallebarde#run() abort
-    let l:list = s:get_file_list()
-    
-    if len(l:list) == 0
-        execute "silent edit " . g:hallebarde_file
+    if !filereadable(g:hallebarde_file)
+        echohl ErrorMsg
+        echomsg "The " . g:hallebarde_file . " file does not exists"
+        echohl None
         
     else
-        call fzf#run({
-            \  "source":  l:list,
-            \  "sink":    "e",
-            \  "options": "-x +s",
-            \  "window":  { "width": 0.9, "height": 0.9 }
-            \ } )
+        let l:list = s:get_file_list()
+        
+        if len(l:list) == 0
+            echohl MoreMsg
+            echomsg "The hallebarde file is empty"
+            echohl None
+            
+        else
+            call fzf#run({
+                \  "source":  l:list,
+                \  "sink":    "e",
+                \  "options": "-x +s",
+                \  "window":  { "width": 0.9, "height": 0.9 }
+                \ } )
     
+        endif
     endif
 endfunction
 
