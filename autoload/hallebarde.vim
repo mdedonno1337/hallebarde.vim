@@ -11,6 +11,10 @@ if !exists("g:hallebarde_file")
   let g:hallebarde_file = ".hallebarde"
 endif
 
+if !exists("g:hallebarde_window_options")
+  let g:hallebarde_window_options = { "width": 0.7, "height": 0.7 }
+endif
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Get and process the input data
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -44,7 +48,7 @@ function! hallebarde#run() abort
                 \  "source":  l:list,
                 \  "sink":    "e",
                 \  "options": "-x +s",
-                \  "window":  { "width": 0.9, "height": 0.9 }
+                \  "window":  g:hallebarde_window_options
                 \ } )
     
         endif
