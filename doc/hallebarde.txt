@@ -30,8 +30,11 @@ g:hallebarde_file
 
 COMMANDS                                        *hallebarde-commands*
 
+
+                                                *:Hallebarde*
 :Hallebarde             Get the FZF list with the stored bookmarked files.
 
+                                                *:HallebardeAdd*
 :HallebardeAdd          Add the current file to the bookmark list.
 
 ABOUT                                           *disassemble-about*
