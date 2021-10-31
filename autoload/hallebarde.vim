@@ -24,6 +24,14 @@ function! s:get_file_list() abort
 endfunction
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Sink for the selected file
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+function! s:sink(file) abort
+    execute "edit " . a:file
+endfunction
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Run the fzf on the list of files
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -46,7 +54,7 @@ function! hallebarde#run() abort
         else
             call fzf#run({
                 \  "source":  l:list,
-                \  "sink":    "e",
+                \  "sink":    function('s:sink'),
                 \  "options": "-x +s",
                 \  "window":  g:hallebarde_window_options
                 \ } )
