@@ -1,0 +1,44 @@
+*hallebarde.txt*  Easy file switcher between bookmarked files
+
+Author:  Marco De Donno <mdedonno1337@gmail.com>
+License: GPLv3
+
+INTRODUCTION                                    *hallebarde* *hallebarde.vim*
+
+This plugin allows you to store a list of files per project for easy jump
+between them. The main logic is similar to marks, but we only store the files
+path; the exact location in the files are stored by vim and updated when you
+make edits.
+
+The logic is a bit similar to the `ThePrimeagen/harpoon` plugin. However, the
+current plugin in only written in vimscript and uses only `junegunn/fzf` and
+`junegunn/fzf.vim` as dependencies, hence compatible with neovim 0.4 (and
+probably vim).
+
+The list of bookmarked files is stored in the current location. It's
+recommanded to open vim directly at the root of the project and store the
+files as relatives path. It's also possible to use the full path of files if
+thoses are located in an other folder.
+
+CONFIGURATION                                    *hallebarde-configuration*
+
+                                                 *g:hallebarde_file*
+g:hallebarde_file
+                        Name of the file to store the list of bookmarked
+                        files. The default value is `.hallebarde`.
+
+
+COMMANDS                                        *hallebarde-commands*
+
+:Hallebarde             Get the FZF list with the stored bookmarked files.
+
+:HallebardeAdd          Add the current file to the bookmark list.
+
+ABOUT                                           *disassemble-about*
+
+Grab the latest version or report a bug on GitHub:
+
+https://github.com/mdedonno1337/hallebarde.vim
+
+vim:tw=78:et:ft=help:norl:
+
