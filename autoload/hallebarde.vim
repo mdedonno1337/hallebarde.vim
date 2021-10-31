@@ -88,3 +88,11 @@ function! hallebarde#add() abort
     endif
 endfunction
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Open the hallebarde configuration file
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+function! hallebarde#open() abort
+    execute "edit " . g:hallebarde_file
+endfunction
+
