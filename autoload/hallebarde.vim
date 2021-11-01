@@ -62,7 +62,7 @@ function! hallebarde#run() abort
             call fzf#run({
                 \  "source":  l:list,
                 \  "sink*":   function('s:sink'),
-                \  "options": "-x +s --expect=ctrl-e",
+                \  "options": "-x --expect=ctrl-e",
                 \  "window":  g:hallebarde_window_options
                 \ } )
     
