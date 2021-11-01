@@ -20,7 +20,11 @@ endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 function! s:get_file_list() abort
-    return readfile(g:hallebarde_file)
+    if filereadable(g:hallebarde_file)
+        return readfile(g:hallebarde_file)
+    else
+        return []
+    endif
 endfunction
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -47,62 +51,54 @@ endfunction
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 function! hallebarde#run(count) abort
-    " Check if the hallebarde file is present on disk
-    if !filereadable(g:hallebarde_file)
-        echohl ErrorMsg
-        echomsg "The " . g:hallebarde_file . " file does not exists"
+    " Get the content of the file and open the FZF dialog
+    let l:list = s:get_file_list()
+    
+    " Empty file
+    if len(l:list) == 0
+        echohl MoreMsg
+        echomsg "No files bookmarked in hallebard"
         echohl None
         
     else
-        " Get the content of the file and open the FZF dialog
-        let l:list = s:get_file_list()
-        
-        " Empty file
-        if len(l:list) == 0
-            echohl MoreMsg
-            echomsg "The hallebarde file is empty"
-            echohl None
-            
-        else
-            " Target directly a hallebarded file with a count prefix
-            if a:count > 0
-                if a:count > len(l:list)
-                    echohl ErrorMsg
-                    echomsg "There is less than " . a:count . " in the hallebard list (" . len(l:list) . ")"
-                    echohl None
-                    
-                else
-                    call s:hallbarde_sink(["", l:list[a:count - 1]])
-                    
-                endif
-            
-            " Only one entry
-            elseif len(l:list) == 1
-                call s:hallbarde_sink(["", l:list[0]])
-            
-            " Multiple entries
-            else
-                " Get the position of the current file in the list
-                let l:matched = match(l:list, expand("%"))
+        " Target directly a hallebarded file with a count prefix
+        if a:count > 0
+            if a:count > len(l:list)
+                echohl ErrorMsg
+                echomsg "There is less than " . a:count . " in the hallebard list (" . len(l:list) . ")"
+                echohl None
                 
-                " If the list is only of length 2, and one of them is the
-                " current file, the only usefull action is to switch to the
-                " other file directly, without prompting the user (jump to the
-                " current file is useless).
-                if len(l:list) == 2 && l:matched != -1
-                    call s:hallbarde_sink(["", l:list[1-l:matched]])
-                    
-                else
-                    " Prompt the use for the list of files
-                    call fzf#run({
-                        \  "source":  l:list,
-                        \  "sink*":   function("s:hallbarde_sink"),
-                        \  "options": "-x --expect=ctrl-e",
-                        \  "window":  g:hallebarde_window_options
-                        \ } )
-                endif
-        
+            else
+                call s:hallbarde_sink(["", l:list[a:count - 1]])
+                
             endif
+        
+        " Only one entry
+        elseif len(l:list) == 1
+            call s:hallbarde_sink(["", l:list[0]])
+        
+        " Multiple entries
+        else
+            " Get the position of the current file in the list
+            let l:matched = match(l:list, expand("%"))
+            
+            " If the list is only of length 2, and one of them is the
+            " current file, the only usefull action is to switch to the
+            " other file directly, without prompting the user (jump to the
+            " current file is useless).
+            if len(l:list) == 2 && l:matched != -1
+                call s:hallbarde_sink(["", l:list[1-l:matched]])
+                
+            else
+                " Prompt the use for the list of files
+                call fzf#run({
+                    \  "source":  l:list,
+                    \  "sink*":   function("s:hallbarde_sink"),
+                    \  "options": "-x --expect=ctrl-e",
+                    \  "window":  g:hallebarde_window_options
+                    \ } )
+            endif
+    
         endif
     endif
 endfunction
@@ -113,20 +109,21 @@ endfunction
 
 " Add the current file to the list of bookmarks
 function! hallebarde#add() abort
-    let l:file_path = expand("%")
+    let l:current_file = expand("%")
+    let l:list = s:get_file_list()
     
     " Check if the file is already in the list
-    if filereadable(g:hallebarde_file) && match(readfile(g:hallebarde_file), l:file_path) != -1
+    if match(l:list, l:current_file) != -1
         echohl MoreMsg
         echomsg "This file is already present in the hallebarde list"
         echohl None
         
     " Add the file if not existing in the list
     else
-        call writefile([l:file_path], g:hallebarde_file, "a")
+        call writefile([l:current_file], g:hallebarde_file, "a")
         
         echohl MoreMsg
-        echomsg l:file_path . " added to the hallebarde list"
+        echomsg l:current_file . " added to the hallebarde list"
         echohl None
         
     endif
