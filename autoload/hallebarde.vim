@@ -82,12 +82,25 @@ function! hallebarde#run(count) abort
             
             " Multiple entries
             else
-                call fzf#run({
-                    \  "source":  l:list,
-                    \  "sink*":   function("s:hallbarde_sink"),
-                    \  "options": "-x --expect=ctrl-e",
-                    \  "window":  g:hallebarde_window_options
-                    \ } )
+                " Get the position of the current file in the list
+                let l:matched = match(l:list, expand("%"))
+                
+                " If the list is only of length 2, and one of them is the
+                " current file, the only usefull action is to switch to the
+                " other file directly, without prompting the user (jump to the
+                " current file is useless).
+                if len(l:list) == 2 && l:matched != -1
+                    call s:hallbarde_sink(["", l:list[1-l:matched]])
+                    
+                else
+                    " Prompt the use for the list of files
+                    call fzf#run({
+                        \  "source":  l:list,
+                        \  "sink*":   function("s:hallbarde_sink"),
+                        \  "options": "-x --expect=ctrl-e",
+                        \  "window":  g:hallebarde_window_options
+                        \ } )
+                endif
         
             endif
         endif
