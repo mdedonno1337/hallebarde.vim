@@ -24,9 +24,10 @@ If the list contains only 2 elements, and one of them is the current file, the
 only action that make sense is to switch to the other file; this automatic
 switch is done automatically.
 
-You can use a count prefix to the *Hallebarde* command to open automatically
+You can use a count prefix to the |Hallebarde| command to open automatically
 the `n-th` element from the list. If you want to open the 3rth element of the
-list, with the `nmap <Space> <CMD>Hallebarde<CR>` binding, simply type `3<Space>`.
+list, with the `nmap <Space> <CMD>Hallebarde<CR>` binding for the |Hallebarde|
+function, simply type `3<Space>`.
 
 CONFIGURATION                                    *hallebarde-configuration*
 
