@@ -56,7 +56,7 @@ function! hallebarde#run() abort
             echohl None
             
         elseif len(l:list) == 1
-            call s:sink(l:list[0])
+            call s:sink(["", l:list[0]])
         
         else
             call fzf#run({
