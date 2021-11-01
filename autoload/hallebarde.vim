@@ -33,7 +33,7 @@ function! s:sink(file) abort
     " validation. If the user uses "enter" to validate the menu, the first
     " entry of this list will be an empty string.
     if a:file[0] == "ctrl-e"
-        call hallebarde#open()
+        call hallebarde#edit()
         
     " Make the default action with the selected file
     else
@@ -120,7 +120,7 @@ endfunction
 " Open the hallebarde configuration file
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-function! hallebarde#open() abort
+function! hallebarde#edit() abort
     execute "edit " . g:hallebarde_file
 endfunction
 
