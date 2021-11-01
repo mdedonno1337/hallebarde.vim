@@ -20,13 +20,27 @@ recommanded to open vim directly at the root of the project and store the
 files as relatives path. It's also possible to use the full path of files if
 thoses are located in an other folder.
 
+If the list contains only 2 elements, and one of them is the current file, the
+only action that make sense is to switch to the other file; this automatic
+switch is done automatically.
+
 CONFIGURATION                                    *hallebarde-configuration*
+
+Variables~
 
                                                  *g:hallebarde_file*
 g:hallebarde_file
                         Name of the file to store the list of bookmarked
                         files. The default value is `.hallebarde`.
 
+Example of mappings~
+
+>
+  Plug 'mdedonno1337/hallebarde.vim'
+  
+  nnoremap <Leader><Leader> <CMD>Hallebarde<CR>
+  nnoremap <Leader>a        <CMD>HallebardeAdd<CR>
+<
 
 COMMANDS                                        *hallebarde-commands*
 
@@ -36,6 +50,9 @@ COMMANDS                                        *hallebarde-commands*
 
                                                 *:HallebardeAdd*
 :HallebardeAdd          Add the current file to the bookmark list.
+
+                                                *:HallebardeEdit*
+:HallebardeEdit         Edit the `.hallebarde` file.
 
 ABOUT                                           *disassemble-about*
 
