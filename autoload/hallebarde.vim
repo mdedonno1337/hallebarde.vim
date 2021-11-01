@@ -3,16 +3,16 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 if exists("g:loaded_hallebarde")
-  finish
+    finish
 endif
 let g:loaded_hallebarde = 1
 
 if !exists("g:hallebarde_file")
-  let g:hallebarde_file = ".hallebarde"
+    let g:hallebarde_file = ".hallebarde"
 endif
 
 if !exists("g:hallebarde_window_options")
-  let g:hallebarde_window_options = { "width": 0.7, "height": 0.7 }
+    let g:hallebarde_window_options = { "width": 0.7, "height": 0.7 }
 endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -28,10 +28,17 @@ endfunction
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 function! s:sink(file) abort
+    " Check the validation of the fzf menu
+    " With the use of the "sink*" option, the first entry is the way of
+    " validation. If the user uses "enter" to validate the menu, the first
+    " entry of this list will be an empty string.
     if a:file[0] == "ctrl-e"
         call hallebarde#open()
+        
+    " Make the default action with the selected file
     else
         execute "edit " . a:file[1]
+        
     endif
 endfunction
 
@@ -50,18 +57,21 @@ function! hallebarde#run() abort
         " Get the content of the file and open the FZF dialog
         let l:list = s:get_file_list()
         
+        " Empty file
         if len(l:list) == 0
             echohl MoreMsg
             echomsg "The hallebarde file is empty"
             echohl None
             
+        " Only one entry
         elseif len(l:list) == 1
             call s:sink(["", l:list[0]])
         
+        " Multiple entries
         else
             call fzf#run({
                 \  "source":  l:list,
-                \  "sink*":   function('s:sink'),
+                \  "sink*":   function("s:sink"),
                 \  "options": "-x --expect=ctrl-e",
                 \  "window":  g:hallebarde_window_options
                 \ } )
