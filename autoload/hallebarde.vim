@@ -111,7 +111,10 @@ function! hallebarde#add() abort
     " Add the file if not existing in the list
     else
         call writefile([l:file_path], g:hallebarde_file, "a")
+        
+        echohl MoreMsg
         echomsg l:file_path . " added to the hallebarde list"
+        echohl None
         
     endif
 endfunction
