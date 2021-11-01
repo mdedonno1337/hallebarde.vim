@@ -27,7 +27,7 @@ endfunction
 " Sink for the selected file
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-function! s:sink(file) abort
+function! s:hallbarde_sink(file) abort
     " Check the validation of the fzf menu
     " With the use of the "sink*" option, the first entry is the way of
     " validation. If the user uses "enter" to validate the menu, the first
@@ -72,19 +72,19 @@ function! hallebarde#run(count) abort
                     echohl None
                     
                 else
-                    call s:sink(["", l:list[a:count - 1]])
+                    call s:hallbarde_sink(["", l:list[a:count - 1]])
                     
                 endif
             
             " Only one entry
             elseif len(l:list) == 1
-                call s:sink(["", l:list[0]])
+                call s:hallbarde_sink(["", l:list[0]])
             
             " Multiple entries
             else
                 call fzf#run({
                     \  "source":  l:list,
-                    \  "sink*":   function("s:sink"),
+                    \  "sink*":   function("s:hallbarde_sink"),
                     \  "options": "-x --expect=ctrl-e",
                     \  "window":  g:hallebarde_window_options
                     \ } )
