@@ -46,7 +46,7 @@ endfunction
 " Run the fzf on the list of files
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-function! hallebarde#run() abort
+function! hallebarde#run(count) abort
     " Check if the hallebarde file is present on disk
     if !filereadable(g:hallebarde_file)
         echohl ErrorMsg
@@ -63,19 +63,33 @@ function! hallebarde#run() abort
             echomsg "The hallebarde file is empty"
             echohl None
             
-        " Only one entry
-        elseif len(l:list) == 1
-            call s:sink(["", l:list[0]])
-        
-        " Multiple entries
         else
-            call fzf#run({
-                \  "source":  l:list,
-                \  "sink*":   function("s:sink"),
-                \  "options": "-x --expect=ctrl-e",
-                \  "window":  g:hallebarde_window_options
-                \ } )
-    
+            " Target directly a hallebarded file with a count prefix
+            if a:count > 0
+                if a:count > len(l:list)
+                    echohl ErrorMsg
+                    echomsg "There is less than " . a:count . " in the hallebard list (" . len(l:list) . ")"
+                    echohl None
+                    
+                else
+                    call s:sink(["", l:list[a:count - 1]])
+                    
+                endif
+            
+            " Only one entry
+            elseif len(l:list) == 1
+                call s:sink(["", l:list[0]])
+            
+            " Multiple entries
+            else
+                call fzf#run({
+                    \  "source":  l:list,
+                    \  "sink*":   function("s:sink"),
+                    \  "options": "-x --expect=ctrl-e",
+                    \  "window":  g:hallebarde_window_options
+                    \ } )
+        
+            endif
         endif
     endif
 endfunction
