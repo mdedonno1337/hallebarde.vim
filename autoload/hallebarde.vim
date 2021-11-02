@@ -146,7 +146,7 @@ function! hallebarde#next(direction) abort
 endfunction
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Add the current file to the list of files
+" Add or remove the current file to the list of files
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Add the current file to the list of bookmarks
@@ -166,6 +166,28 @@ function! hallebarde#add() abort
         
         echohl MoreMsg
         echomsg l:current_file . " added to the hallebarde list"
+        echohl None
+        
+    endif
+endfunction
+
+" Remove the current file to the list of bookmarks
+function! hallebarde#remove() abort
+    let l:current_file = expand("%")
+    let l:list = s:get_file_list()
+    let l:position_in_file = match(l:list, l:current_file)
+    
+    if l:position_in_file != -1
+        call remove(l:list, l:position_in_file)
+        call writefile(l:list, g:hallebarde_file)
+        
+        echohl MoreMsg
+        echomsg l:current_file . " removed to the hallebarde list"
+        echohl None
+        
+    else
+        echohl MoreMsg
+        echomsg "This file is not in the hallebarde list"
         echohl None
         
     endif
