@@ -61,7 +61,14 @@ endfunction
 " Run the fzf on the list of files
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-function! hallebarde#run(target_file_id) abort
+function! hallebarde#run(...) abort
+    " Get the parameter if passed, otherwhise use the prefix number
+    if a:0 == 0
+        let l:target_file_id = v:count
+    else
+        let l:target_file_id = a:1
+    endif
+    
     " Get the content of the file and open the FZF dialog
     let l:list = s:get_file_list()
     let b:hallebarde_winview = winsaveview()
@@ -74,14 +81,14 @@ function! hallebarde#run(target_file_id) abort
         
     else
         " Target directly a hallebarded file with a target_file_id prefix
-        if a:target_file_id > 0
-            if a:target_file_id > len(l:list)
+        if l:target_file_id > 0
+            if l:target_file_id > len(l:list)
                 echohl ErrorMsg
-                echomsg "There is less than " . a:target_file_id . " in the hallebard list (" . len(l:list) . ")"
+                echomsg "There is less than " . l:target_file_id . " in the hallebard list (" . len(l:list) . ")"
                 echohl None
                 
             else
-                call s:hallbarde_sink(["", l:list[a:target_file_id - 1]])
+                call s:hallbarde_sink(["", l:list[l:target_file_id - 1]])
                 
             endif
         
