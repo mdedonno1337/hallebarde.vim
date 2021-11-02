@@ -38,6 +38,13 @@ g:hallebarde_file
                         Name of the file to store the list of bookmarked
                         files. The default value is `.hallebarde`.
 
+                                                 *g:hallebarde_use_winview_save_and_restore*
+g:hallebarde_use_winview_save_and_restore
+                        Store the location of the cursor when the dialog is
+                        open, and reset the position of the cursor when
+                        reopening the file. The default value is set to
+                        `v:true`.
+
 Example of mappings~
 
 >
