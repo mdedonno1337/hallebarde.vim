@@ -61,7 +61,7 @@ endfunction
 " Run the fzf on the list of files
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-function! hallebarde#run(count) abort
+function! hallebarde#run(target_file_id) abort
     " Get the content of the file and open the FZF dialog
     let l:list = s:get_file_list()
     let b:hallebarde_winview = winsaveview()
@@ -73,15 +73,15 @@ function! hallebarde#run(count) abort
         echohl None
         
     else
-        " Target directly a hallebarded file with a count prefix
-        if a:count > 0
-            if a:count > len(l:list)
+        " Target directly a hallebarded file with a target_file_id prefix
+        if a:target_file_id > 0
+            if a:target_file_id > len(l:list)
                 echohl ErrorMsg
-                echomsg "There is less than " . a:count . " in the hallebard list (" . len(l:list) . ")"
+                echomsg "There is less than " . a:target_file_id . " in the hallebard list (" . len(l:list) . ")"
                 echohl None
                 
             else
-                call s:hallbarde_sink(["", l:list[a:count - 1]])
+                call s:hallbarde_sink(["", l:list[a:target_file_id - 1]])
                 
             endif
         
@@ -136,14 +136,14 @@ function! s:hallebarde_next_or_previous(delta) abort
     endif
 endfunction
 
-function! hallebarde#previous(count) abort
-    let l:count = max([1,a:count])
-    call s:hallebarde_next_or_previous(-1 * l:count)
+function! hallebarde#previous(target_file_id) abort
+    let l:target_file_id = max([1,a:target_file_id])
+    call s:hallebarde_next_or_previous(-1 * l:target_file_id)
 endfunction
 
-function! hallebarde#next(count) abort
-    let l:count = max([1,a:count])
-    call s:hallebarde_next_or_previous(l:count)
+function! hallebarde#next(target_file_id) abort
+    let l:target_file_id = max([1,a:target_file_id])
+    call s:hallebarde_next_or_previous(l:target_file_id)
 endfunction
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
