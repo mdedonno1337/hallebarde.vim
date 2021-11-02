@@ -126,7 +126,9 @@ endfunction
 " Next and previous quick navigation
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-function! s:hallebarde_next_or_previous(delta) abort
+function! hallebarde#next(direction) abort
+    let l:count = max([1, v:count])
+    let l:delta = a:direction * l:count
     let l:list = s:get_file_list()
     
     if len(l:list) == 0
@@ -136,21 +138,11 @@ function! s:hallebarde_next_or_previous(delta) abort
         
     else
         let l:matched = match(l:list, expand("%"))
-        let l:next_file_index = (l:matched + a:delta) % len(l:list)
+        let l:next_file_index = (l:matched + l:delta) % len(l:list)
         let l:next_file_path = l:list[l:next_file_index]
         
         call s:hallbarde_sink(["", l:next_file_path])
     endif
-endfunction
-
-function! hallebarde#previous(target_file_id) abort
-    let l:target_file_id = max([1,a:target_file_id])
-    call s:hallebarde_next_or_previous(-1 * l:target_file_id)
-endfunction
-
-function! hallebarde#next(target_file_id) abort
-    let l:target_file_id = max([1,a:target_file_id])
-    call s:hallebarde_next_or_previous(l:target_file_id)
 endfunction
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
