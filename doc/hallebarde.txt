@@ -66,6 +66,14 @@ COMMANDS                                        *hallebarde-commands*
                                                 *:HallebardeEdit*
 :HallebardeEdit         Edit the `.hallebarde` file.
 
+                                                *:HallebardePrevious*
+:HallebardePrevious     Go to the previous file in the list. This command can
+                        be prefixed by a number to go to the `n-th` previous file.
+
+                                                *:HallebardeNext*
+:HallebardeNext         Go to the next file in the list. This command can be
+                        prefixed by a number to go to the `n-th` previous file.
+
 ABOUT                                           *disassemble-about*
 
 Grab the latest version or report a bug on GitHub:

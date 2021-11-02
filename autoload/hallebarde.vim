@@ -116,6 +116,37 @@ function! hallebarde#run(count) abort
 endfunction
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Next and previous quick navigation
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+function! s:hallebarde_next_or_previous(delta) abort
+    let l:list = s:get_file_list()
+    
+    if len(l:list) == 0
+        echohl MoreMsg
+        echomsg "No files bookmarked in hallebard"
+        echohl None
+        
+    else
+        let l:matched = match(l:list, expand("%"))
+        let l:next_file_index = (l:matched + a:delta) % len(l:list)
+        let l:next_file_path = l:list[l:next_file_index]
+        
+        call s:hallbarde_sink(["", l:next_file_path])
+    endif
+endfunction
+
+function! hallebarde#previous(count) abort
+    let l:count = max([1,a:count])
+    call s:hallebarde_next_or_previous(-1 * l:count)
+endfunction
+
+function! hallebarde#next(count) abort
+    let l:count = max([1,a:count])
+    call s:hallebarde_next_or_previous(l:count)
+endfunction
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Add the current file to the list of files
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
