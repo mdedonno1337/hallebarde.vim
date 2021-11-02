@@ -94,7 +94,7 @@ function! hallebarde#run(count) abort
                 call fzf#run({
                     \  "source":  l:list,
                     \  "sink*":   function("s:hallbarde_sink"),
-                    \  "options": "-x --expect=ctrl-e",
+                    \  "options": "-x --expect=ctrl-e --bind backward-eof:abort",
                     \  "window":  g:hallebarde_window_options
                     \ } )
             endif
