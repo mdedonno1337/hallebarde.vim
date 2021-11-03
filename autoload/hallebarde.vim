@@ -71,7 +71,10 @@ function! hallebarde#run(...) abort
     
     " Get the content of the file and open the FZF dialog
     let l:list = s:get_file_list()
-    let b:hallebarde_winview = winsaveview()
+    
+    if g:hallebarde_use_winview_save_and_restore
+        let b:hallebarde_winview = winsaveview()
+    endif
     
     " Empty file
     if len(l:list) == 0
