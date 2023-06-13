@@ -7,8 +7,8 @@ if exists("g:loaded_hallebarde")
 endif
 let g:loaded_hallebarde = 1
 
-if !exists("g:hallebarde_file")
-    let g:hallebarde_file = ".hallebarde"
+if !exists("g:hallebarde_map")
+    let g:hallebarde_map = stdpath("data") . "/hallebarde/hallebarde_map.json"
 endif
 
 if !exists("g:hallebarde_window_options")
@@ -17,6 +17,32 @@ endif
 
 if !exists("g:hallebarde_use_winview_save_and_restore")
     let g:hallebarde_use_winview_save_and_restore = v:true
+endif
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Get project specific hallebarde_file from stdpath('data')
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+function! s:get_hallebarde_file() abort
+    let l:map = {}
+    if filereadable(g:hallebarde_map)
+        let l:map_str = join(readfile(g:hallebarde_map))
+        let l:map = json_decode(map_str)
+        if has_key(l:map, getcwd()) == 1
+            return stdpath("data") . "/hallebarde/project-files/" . l:map[getcwd()]
+        endif
+    endif
+    let l:hallebarde_file_uuid = system('uuidgen')[:35]
+    let l:map[getcwd()] = l:hallebarde_file_uuid
+    let l:map_string = json_encode(l:map)
+    call mkdir(stdpath("data") . "/hallebarde/project-files", "p")
+    call writefile([l:map_string], g:hallebarde_map)
+    let l:file_path = stdpath("data") . "/hallebarde/project-files/" . l:hallebarde_file_uuid
+    return l:file_path
+endfunction
+
+if !exists("g:hallebarde_file")
+    let g:hallebarde_file = s:get_hallebarde_file()
 endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -102,7 +128,7 @@ function! hallebarde#run(...) abort
         " Multiple entries
         else
             " Get the position of the current file in the list
-            let l:matched = match(l:list, expand("%"))
+            let l:matched = match(l:list, expand("%:~:."))
             
             " If the list is only of length 2, and one of them is the
             " current file, the only usefull action is to switch to the
@@ -140,7 +166,7 @@ function! hallebarde#next(direction) abort
         echohl None
         
     else
-        let l:matched = match(l:list, expand("%"))
+        let l:matched = match(l:list, expand("%:~:."))
         let l:next_file_index = (l:matched + l:delta) % len(l:list)
         let l:next_file_path = l:list[l:next_file_index]
         
@@ -154,7 +180,7 @@ endfunction
 
 " Add the current file to the list of bookmarks
 function! hallebarde#add() abort
-    let l:current_file = expand("%")
+    let l:current_file = expand("%:~:.")
     let l:list = s:get_file_list()
     
     " Check if the file is already in the list
@@ -176,7 +202,7 @@ endfunction
 
 " Remove the current file to the list of bookmarks
 function! hallebarde#remove() abort
-    let l:current_file = expand("%")
+    let l:current_file = expand("%:~:.")
     let l:list = s:get_file_list()
     let l:position_in_file = match(l:list, l:current_file)
     
